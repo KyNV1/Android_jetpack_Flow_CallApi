@@ -6,32 +6,29 @@ import com.example.android_jetpack_flow_callapi.model.User
 import com.example.android_jetpack_flow_callapi.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
+// MainViewModel.kt
 class MainViewModel : ViewModel() {
-    private val repository = UserRepository()
 
+    private val userRepository = UserRepository()
     private val _uiState = MutableStateFlow<UiState<List<User>>>(UiState.Loading)
     val uiState: StateFlow<UiState<List<User>>> = _uiState
 
     init {
-        fetchData()
+        fetchUsers()
     }
 
-    private fun fetchData() {
+    private fun fetchUsers() {
         viewModelScope.launch {
-            repository.getUsers()
-                .onStart { _uiState.value = UiState.Loading }
-                .catch { exeception ->
-                    _uiState.value = UiState.Error(exeception.message.toString())
+            // Repository đã trả về đúng UiState chúng ta cần
+            // ViewModel chỉ việc thu thập và cập nhật state của nó
+            userRepository.getUsers()
+                .collect { state ->
+                    _uiState.value = state
                 }
-                .collect { user ->
-                    _uiState.value = UiState.Success(user)
-                }
-
         }
     }
 }
+
 

@@ -1,11 +1,11 @@
 package com.example.android_jetpack_flow_callapi.network
 
 import com.example.android_jetpack_flow_callapi.model.User
-import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
 import retrofit2.http.GET
 
 interface ApiService {
-    // dùng suspend funtion để biểu thị đây là một tác vụ bất đồng bộ, trả ve một kết quả duy nhất
+    // bây giờ chúng ta muon nhận về toàn bộ Response
     @GET("users")
-    suspend fun getUsers(): List<User>
+    suspend fun getUsers(): Response<List<User>>
 }

@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     private fun observerUiState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect {state->
+                viewModel.uiState.collect { state ->
                     when (state) {
                         is UiState.Error -> {
                             process.visibility = View.GONE
